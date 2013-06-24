@@ -1,15 +1,64 @@
 #include <iostream>
+#include <list>
+#include <cmath>
+
 using namespace std;
+class Command;
 
-enum Type {MOVE, TURN, PUTPEN};
+enum Type {MOVE, TURN, PUTPEN,NONE};
 
-class ProgramLogo;
+class ProgramLogo
+{
+protected:
+	int x,y,turn;
+	bool down;
+private:
+	list<Command*> polecenia;
+public:
+	ProgramLogo(int x=0, int y=0, int turn=0, bool down=true)
+	{
+		this->x=x; this->y=y;this->turn=turn; this->down=down;
+	}
+	ProgramLogo& operator = (ProgramLogo &p)
+	{
+		x=p.x; y=p.y; turn=p.turn; down=p.down;
+		/*list<Command*>::iterator it;
+		Command *nowy;
+		for(it=p.polecenia.begin();it!= p.polecenia.end();it++)
+		{
 
-class Command, public ProgramLogo
+			switch((*it)->typ())
+			{
+				case MOVE:nowy = new Move(dynamic_cast<Move*>(*it)->x,*it->y); break;
+				case TURN:nowy = new Turn(*it->turn); break;
+				case PUTPEN:nowy = new PutPen(*it->down); break;
+			}
+			polecenia.push_back(nowy);
+		}*/
+	}
+	ProgramLogo(ProgramLogo &p)
+	{
+		*this=p;
+	}
+	~ProgramLogo()
+	{
+		list<Command*>::iterator it;
+		for(it=p.polecenia.begin();it!= p.polecenia.end();it++)
+		{
+			delete *it;
+		}
+	}
+	void newCommand(Command *c)
+	{
+		polecenia.push_back(c);
+	}
+};
+
+class Command
 {
 public:
 	virtual void wykonaj()=0;
-	virtual int typ()=0;
+	virtual Type typ(){return NONE;}
 };
 
 class Move: public Command
@@ -26,7 +75,7 @@ public:
 		ProgramLogo::y+=y*sin(ProgramLogo::turn);
 	}
 	Type typ(){return MOVE;}
-}
+};
 
 class Turn: public Command
 {
@@ -58,47 +107,3 @@ public:
 	Type typ(){return PUTPEN;}
 };
 
-class ProgramLogo
-{
-	int x,y,turn;
-	bool down;
-	list<Command*> polecenia;
-public:
-	ProgramLogo(int x=0, int y=0, int turn=0, bool down=true)
-	{
-		this->x=x; this->y=y;this->turn=turn; this->down=down;
-	}
-	ProgramLogo& operator = (ProgramLogo &p)
-	{
-		x=p.x; y=p.y; turn=p.turn; down=p.down;
-		list<Command*>::iterator it;
-		Command *nowy;
-		for(it=p.polecenia.begin();it!= p.polecenia.end();it++)
-		{
-
-			switch(it->typ())
-			{
-				case MOVE:nowy = new Move(it->x,it->y); break;
-				case TURN:nowy = new Turn(it->turn); break;
-				case PUTPEN:nowy = new PutPen(it->down); break;
-			}
-			polecenia.push_back(nowy);
-		}
-	}
-	ProgramLogo(ProgramLogo &p)
-	{
-		*this=p;
-	}
-	~ProgramLogo()
-	{
-		list<Command*>::iterator it;
-		for(it=p.polecenia.begin();it!= p.polecenia.end();it++)
-		{
-			delete *it;
-		}
-	}
-	void newCommand(Command *c)
-	{
-		polecenia.push_back(c);
-	}
-};
