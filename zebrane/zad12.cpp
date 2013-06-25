@@ -11,6 +11,7 @@ public:
     Iterator(char* filename)
     {
         file.open(filename);
+	next(); // zeby pobrala sie pierwsza linia
     }
     ~Iterator()
     {
