@@ -27,16 +27,13 @@ public:
             if(it->first.miasto1==first && it->first.miasto2==second)
             {
                 it->second=w;
+				return;
             }
-            else
-            {
-                miasta m;
-                m.miasto1=first;
-                m.miasto2=second;
-                mapa[m]=w;
-            }
-
         }
+        miasta m;
+		m.miasto1=first;
+		m.miasto2=second;
+		mapa[m]=w;
 
     }
     double get(const char*first, const char*second )
