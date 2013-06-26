@@ -4,7 +4,10 @@
 using namespace std;
 
 
-class Obiekt{};
+class Obiekt{
+public:
+    virtual ~Obiekt();//żeby usuwały się obiekty pochodne
+};
 
 
 class Int:public Obiekt{
